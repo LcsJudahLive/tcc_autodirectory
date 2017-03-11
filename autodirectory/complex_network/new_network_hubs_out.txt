@@ -1,0 +1,7 @@
+estava		Out-degree: 6
+idiota		Out-degree: 6
+dia		Out-degree: 5
+feito		Out-degree: 4
+programando		Out-degree: 3
+certo		Out-degree: 2
+um		Out-degree: 1

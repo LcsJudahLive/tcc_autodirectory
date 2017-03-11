@@ -1,0 +1,7 @@
+um		In-degree: 7
+certo		In-degree: 6
+programando		In-degree: 5
+feito		In-degree: 4
+dia		In-degree: 3
+estava		In-degree: 2
+idiota		In-degree: 0

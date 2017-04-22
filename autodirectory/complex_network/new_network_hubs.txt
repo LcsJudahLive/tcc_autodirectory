@@ -1,7 +1,0 @@
-feito		Degree: 8
-estava		Degree: 8
-um		Degree: 8
-dia		Degree: 8
-programando		Degree: 8
-certo		Degree: 8
-idiota		Degree: 6

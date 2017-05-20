@@ -11,9 +11,9 @@ from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
 import mpld3
 
-pdf_path = '/home/lucas/document_base'
+pdf_path = '/home/lucas/Downloads'
 path = '/home/lucas/files'
-newpdf.main(pdf_path, path)
+#newpdf.main(pdf_path, path)
 file_titles = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path,f))]
 text = ''
 documents_text = []
@@ -85,7 +85,7 @@ print
 
 from sklearn.cluster import KMeans
 
-num_clusters = 5
+num_clusters = 20
 km = KMeans(n_clusters=num_clusters)
 km.fit(tfidf_matrix)
 clusters = km.labels_.tolist()

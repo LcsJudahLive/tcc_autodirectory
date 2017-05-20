@@ -44,35 +44,46 @@ def main(args, output_path):
     rsrcmgr = PDFResourceManager(caching=caching)
 
     for fname in file_titles:
-        outfile = fname.strip(".pdf")
-        if not outtype:
-            outtype = 'text'
+        if fname.split('.')[1] == "pdf":
+            outfile = fname.strip(".pdf")
+            if not outtype:
+                outtype = 'text'
+                if outfile:
+                    if outfile.endswith('.htm') or outfile.endswith('.html'):
+                        outtype = 'html'
+                    elif outfile.endswith('.xml'):
+                        outtype = 'xml'
+                    elif outfile.endswith('.tag'):
+                        outtype = 'tag'
             if outfile:
-                if outfile.endswith('.htm') or outfile.endswith('.html'):
-                    outtype = 'html'
-                elif outfile.endswith('.xml'):
-                    outtype = 'xml'
-                elif outfile.endswith('.tag'):
-                    outtype = 'tag'
-        if outfile:
-            outfp = open(output_path + "/" + outfile + ".txt", 'w')
-        else:
-            outfp = sys.stdout
-        
-        if outtype == 'text':
-            device = TextConverter(rsrcmgr, outfp, codec=codec, laparams=laparams,
-                                   imagewriter=imagewriter)
-        else:
-            return "Pass the path that you want to parse"
+                print(output_path + "/" + outfile)
+                outfp = open(output_path + "/" + outfile + ".txt", 'w')
+            else:
+                outfp = sys.stdout
+            
+            if outtype == 'text':
+                device = TextConverter(rsrcmgr, outfp, codec=codec, laparams=laparams,
+                                       imagewriter=imagewriter)
+            else:
+                print('else')
+                return "Pass the path that you want to parse"
 
-        fp = open(args + "/" + fname, 'rb')
-        interpreter = PDFPageInterpreter(rsrcmgr, device)
-        for page in PDFPage.get_pages(fp, pagenos,
-                                      maxpages=maxpages, password=password,
-                                      caching=caching, check_extractable=True):
-            page.rotate = (page.rotate+rotation) % 360
-            interpreter.process_page(page)
-        fp.close()
-    device.close()
-    outfp.close()
+            fp = open(args + "/" + fname, 'rb')
+            
+            try:
+                interpreter = PDFPageInterpreter(rsrcmgr, device)
+                for page in PDFPage.get_pages(fp, pagenos,
+                                              maxpages=maxpages, password=password,
+                                              caching=caching, check_extractable=True):
+                    page.rotate = (page.rotate+rotation) % 360
+                    interpreter.process_page(page)
+            except:
+                print("Exception occured on PDF process")
+                fp.close()
+                device.close()
+                outfp.close()                
+
+            fp.close()
+            device.close()
+            outfp.close()
     return

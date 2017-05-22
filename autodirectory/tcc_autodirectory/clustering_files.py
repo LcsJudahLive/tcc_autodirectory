@@ -11,7 +11,7 @@ from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
 import mpld3
 
-pdf_path = '/home/lucas/Downloads'
+pdf_path = '/new'
 path = '/home/lucas/files'
 #newpdf.main(pdf_path, path)
 file_titles = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path,f))]

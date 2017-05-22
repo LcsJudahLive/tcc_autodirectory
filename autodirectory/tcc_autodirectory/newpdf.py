@@ -44,7 +44,7 @@ def main(args, output_path):
     rsrcmgr = PDFResourceManager(caching=caching)
 
     for fname in file_titles:
-        if fname.split('.')[1] == "pdf":
+        if fname.split('.')[1] == "pdf" and fname.split('.')[0] + '.txt' not in os.listdir(output_path):
             outfile = fname.strip(".pdf")
             if not outtype:
                 outtype = 'text'
@@ -87,3 +87,5 @@ def main(args, output_path):
             device.close()
             outfp.close()
     return
+
+main('/new', '/home/lucas/files')

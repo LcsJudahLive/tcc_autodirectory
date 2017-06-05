@@ -10,14 +10,15 @@ from sklearn import feature_extraction
 from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
 import mpld3
+import time
 
 pdf_path = '/new'
-path = '/home/lucas/files'
-#newpdf.main(pdf_path, path)
+path = '/home/lucas/result_files'
+#newpdf.main(pdf_path,path)
 file_titles = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path,f))]
 text = ''
 documents_text = []
-
+start_time = time.time()
 
 for file in file_titles:
 	open_file = codecs.open(path + '/' + file,'rb',encoding="utf-8")
@@ -85,7 +86,9 @@ print
 
 from sklearn.cluster import KMeans
 
-num_clusters = 20
+#Here you define the number of clusters assigned by Kmeans
+num_clusters = 5
+
 km = KMeans(n_clusters=num_clusters)
 km.fit(tfidf_matrix)
 clusters = km.labels_.tolist()
@@ -110,15 +113,32 @@ print()
 #sort cluster centers by proximity to centroid
 order_centroids = km.cluster_centers_.argsort()[:, ::-1] 
 
+final_time = time.time() - start_time
+keywords = []
+remove_file = open('remove_list.txt','r')
+remove_list = []
+
+#I know, it's a hack, but I've to remove them
+for line in remove_file.readlines():
+    remove_list.append(line)
+
 for i in range(num_clusters):
     print("Cluster %d words:" % i, end='')
-    
-    for ind in order_centroids[i, :6]: #replace 6 with n words per cluster
+    for ind in order_centroids[i, :50]: #You can define the number of words per cluster
+        keywords.append(vocab_frame.ix[terms[ind].split(' ')].values.tolist()[0][0])
         print(' %s' % vocab_frame.ix[terms[ind].split(' ')].values.tolist()[0][0].encode('utf-8', 'ignore'), end=',')
     print() #add whitespace
     print() #add whitespace
-    
-    print("Cluster %d titles:" % i, end='')
+
+    for key in keywords:
+        key = str(key)
+        if re.match('[a-z]{1}',key) or re.match('^cid:[0-9]{3}',key) or type(key) is not str or key in remove_list:
+            #print(key)
+            keywords.remove(key)
+
+    #print(",".join(keywords))
+
+    print("\nCluster %d titles:" % i, end='')
     if type(frame.ix[i]['title']) is str:
     	values = frame.ix[i]['title']
     	string = True
@@ -130,6 +150,6 @@ for i in range(num_clusters):
     	print(", ".join(values))
     else:
 		print(' %s,' % values, end='')
-    
-    print() #add whitespace
-    print() #add whitespace
+
+print("\nTFIDF+KMeans Execution Time: {}".format(final_time)) #add whitespace
+

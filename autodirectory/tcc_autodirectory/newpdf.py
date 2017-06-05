@@ -88,4 +88,4 @@ def main(args, output_path):
             outfp.close()
     return
 
-main('/new', '/home/lucas/files')
+main('/home/lucas/pdf_files', '/home/lucas/result_files')
